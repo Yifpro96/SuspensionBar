@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
+import com.orhanobut.logger.Logger
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -41,6 +42,7 @@ class MainActivity : AppCompatActivity() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     super.onScrollStateChanged(recyclerView, newState)
                     mSuspensionHeight = mSuspensionBar!!.height
+                    Logger.e("height -> $mSuspensionHeight")
                 }
 
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -48,15 +50,18 @@ class MainActivity : AppCompatActivity() {
                     val view = linearLayoutManager.findViewByPosition(mCurrentPosition + 1)
                     if (view != null) {
                         if (view.top <= mSuspensionHeight) {
-                            mSuspensionBar!!.y = (-(mSuspensionHeight - view.top)).toFloat()
+                            val y = (-(mSuspensionHeight - view.top)).toFloat()
+                            Logger.e("y -> $y")
+                            mSuspensionBar!!.y = y
                         } else {
+                            Logger.e("else")
                             mSuspensionBar!!.y = 0f
                         }
                     }
 
                     if (mCurrentPosition != linearLayoutManager.findFirstVisibleItemPosition()) {
                         mCurrentPosition = linearLayoutManager.findFirstVisibleItemPosition()
-
+                        Logger.e("change $mCurrentPosition")
                         updateSuspensionBar()
                         mSuspensionBar!!.y = 0f
                     }
